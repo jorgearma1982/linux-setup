@@ -1,6 +1,6 @@
 # Linux Setup
 
-## Intro
+## Introducción
 
 En esta guia se describe la configuración del sistema Linux para adaptarlo a un ambiente de trabajo para realizar
 tareas relacionadas a la administración de:
@@ -14,96 +14,77 @@ tareas relacionadas a la administración de:
 Intentare usar en su mayoría software libre, es decir, software GNU, el kernel Linux y en especificó la distro
 Kubuntu en una arquitectura x86 de 64-bit.
 
-Para esto necesito dejar algunas cosas bien configuradas:
+### Objetivos
 
-* Entornos de desarrollo
-* Gestores de paquetes
-* Editor de textos
-* Emulador de Terminal
-* Entorno del shell
-* Cliente VPN
-* Navegador Web
+Realizaremos las siguientes actividades:
 
-## Objetivos
-
-Realizaremos las siguientes actividades orientadas a instalar y configurar:
-
-* Herramientas de linea de comando GNU
-* Gestor de paquetes Apt
-* Editor de textos vim
+* Gestión de paquetes Apt
+* Instalación de herramientas GNU
+* Configurando el editor de textos vim
 * Emulador de terminal Terminator
 * El shell zsh con oh-my-zsh
 * Herramientas de búsqueda en linea de comandos
 * Conjunto de herramientas de linea de comandos
 * Herramientas de gestión Cloud
 
-## Gestor de paquetes APT
+## Gestión de paquetes Apt
 
-El programa `apt` es la herramienta de gestión de paquetes en `Kubuntu`, ya que esta basado en la distribución
-`Ubuntu` y esta a su vez se basa en `Debian`.
+Usaremos el programa `apt` para gestionar los paquetes del sistema, Apt ya viene pre instalado en Kubuntu por
+lo que no hay que instalarlo por separado.
 
-Apt ya viene pre instalado en Kubuntu por lo que no hay que instalarlo por separado.
+**NOTA:** Ejecutaremos apt con `sudo` ya que se requieren permisos de administrador para las siguientes operaciones.
 
 Lo primero que debemos aprender a usar es actualizar la lista de paquetes de los repositorios:
 
 ```shell
-$ sudo apt update
+sudo apt update
 ```
 
 Ahora actualizamos los paquetes del sistema:
 
 ```shell
-$ sudo apt upgrade
+sudo apt upgrade
 ```
 
 **NOTA:** Estas dos tareas las debemos de ejecutar frecuentemente para mantener nuestro sistema actualizado.
 
-Buscando paquetes:
+Ahora que el sistema esta actualizado, veremos como usar apt para buscar paquetes, por ejemplo, buscamos
+el programa `git`:
 
 ```shell
-$ sudo apt search git
+sudo apt search git
 ```
+
+Para instalar paquetes usamos:
 
 ```shell
-$ sudo apt install git
+sudo apt install git
 ```
 
-Desinstalando paquetes:
+Para desinstalar paquetes usamos:
 
 ```shell
-$ sudo apt remove git
+sudo apt remove git
 ```
 
-Actualizando paquetes:
+## Instalación de herramientas CLI
 
-```shell
-$ sudo apt update; sudo apt upgrade
-```
-
-Limpieza de paquetes viejos:
-
-```shell
-$ sudo apt clean; sudo apt autoremove
-```
-
-## Instalando comandos GNU
-
-Instalaremos los programas `wget` y `curl` los cuales usaremos para descargar cosas desde
+Instalaremos los programas de linea de comandos `wget` y `curl` los cuales usaremos para descargar cosas desde
 internet usando la línea de comandos:
 
 ```shell
-$ sudo apt install wget curl
+sudo apt install wget curl
 ```
 
-## Editor de textos vim
+## Configuración del editor de textos vim
 
-Instalación de vim:
+Instalamos el editor de textos `vim` con el siguiente comando:
 
 ```shell
-$ sudo apt install vim
+sudo apt install vim
 ```
 
-Editar config:
+Editamos el archivo `~/.vimrc` para cambiar la configuración del editor:
 
 ```shell
 $ vim ~/.vimrc
@@ -130,85 +111,37 @@ set shiftwidth=2
 set softtabstop=2
 set shiftround
 set expandtab " Insertar espacios en lugar de <Tab>s
-set imrmguicolors " Activa true colors en la terminal
 
 " Configuracion spell check
 "set spell
 set nospell
 setlocal spell spelllang=es,en " Corregir palabras usando diccionarios en español
-
-" Mapeos
-"inoremap " ""<left>
-"inoremap ' ''<left>
-"inoremap ( ()<left>
-"inoremap [ []<left>
-"inoremap { {}<left>
-"inoremap {<CR> {<CR>}<ESC>O
-"inoremap {;<CR> {<CR>};<ESC>O
-
-" Syntax for markdown enabled
-au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
-au BufNewFile,BufFilePre,BufRead *.txt set filetype=markdown
-set syntax=markdown
-
-"
-" PLUGINS: https://github.com/junegunn/vim-plug
-"
-
-" Specify a directory for plugins
-call plug#begin('~/.vim/plugged')
-" Challenger-deep-theme: https://github.com/junegunn/vim-plug
-Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-" NERDTree
-Plug 'preservim/nerdtree'
-" vimwiki
-Plug 'vimwiki/vimwiki'
-" editorconfig
-Plug 'editorconfig/editorconfig-vim'
-" Initialize plugin system
-call plug#end()
-
-"
-" THEME:
-"
-colorscheme challenger_deep
-
 ```
 
 Creamos directorio para spell check:
 
 ```shell
-$ mkdir -p ~/.vim/spell
-$ cd ~/.vim/spell
+mkdir -p ~/.vim/spell
+cd ~/.vim/spell
 ```
 
-Descargaremos los siguientes archivos:
-
-* es.latin1.spl
-* es.latin1.sug
-* es.utf-8.spl
-* es.utf-8.sug
-
-Descargamos los archivos:
+Descargaremos los siguientes archivos de diccionarios:
 
 ```shell
-$ wget https://ftp.vim.org/vim/runtime/spell/es.latin1.spl
-$ wget -k https://ftp.vim.org/vim/runtime/spell/es.latin1.spl
-$ wget --no-check-certificate https://ftp.vim.org/vim/runtime/spell/es.latin1.spl
-$ wget https://ftp.vim.org/vim/runtime/spell/es.latin1.sug
-$ wget --no-check-certificate https://ftp.vim.org/vim/runtime/spell/es.latin1.sug
-$ wget --no-check-certificate https://ftp.vim.org/vim/runtime/spell/es.utf-8.spl
-$ wget --no-check-certificate https://ftp.vim.org/vim/runtime/spell/es.utf-8.sug
+wget --no-check-certificate https://ftp.vim.org/vim/runtime/spell/es.latin1.spl
+wget --no-check-certificate https://ftp.vim.org/vim/runtime/spell/es.latin1.sug
+wget --no-check-certificate https://ftp.vim.org/vim/runtime/spell/es.utf-8.spl
+wget --no-check-certificate https://ftp.vim.org/vim/runtime/spell/es.utf-8.sug
 ```
 
 Creamos los archivos para los diccionarios locales:
 
 ```shell
-$ touch ~/.vim/spell/es.utf-8.add
-$ touch ~/.vim/spell/en.utf-8.add
+touch ~/.vim/spell/es.utf-8.add
+touch ~/.vim/spell/en.utf-8.add
 ```
 
-Shortcuts:
+Atajos de teclado para la corrección ortográfica::
 
 * **]s** – Siguiente falta ortográfica
 * **[s** – Anterior falta ortográfica
@@ -217,14 +150,20 @@ Shortcuts:
 * **zug** – Deshacer la adición de una palabra al diccionario.
 * **zw** – Eliminar una palabra del diccionario.
 
-Instalar herramienta para gestión de plugins: plug-vim:
+Ahora vamos a instalar la herramienta para gestión de plugins `plug-vim`:
 
 ```shell
-$ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
 
-Configuración de Plugins:
+Editamos el archivo de configuración de vim:
+
+```shell
+vim .vimrc
+```
+
+Al final del archivo de configuración de vim agregar el siguiente bloque:
 
 ```shell
 "
@@ -233,23 +172,15 @@ Configuración de Plugins:
 
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
-" Challenger-deep-theme: https://github.com/junegunn/vim-plug
-Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 " NERDTree
 Plug 'preservim/nerdtree'
 " vimwiki
 Plug 'vimwiki/vimwiki'
 " Initialize plugin system
 call plug#end()
-
-"
-" THEME:
-"
-colorscheme challenger_deep
-
 ```
 
-Guardar vim, salir, y volver a entrar, entonces:
+Guardar vim, salir, y volver a entrar, entonces ejecutamos el siguiente comando:
 
 ```shell
 :PlugInstall
@@ -260,7 +191,7 @@ Guardar vim, salir, y volver a entrar, entonces:
 Instalamos el paquete Terminator:
 
 ```shell
-$ sudo apt install terminator
+sudo apt install terminator
 ```
 
 Shortcuts: TODO.
@@ -270,19 +201,19 @@ Shortcuts: TODO.
 Instalamos el shell zsh:
 
 ```shell
-$ sudo apt install zsh
+sudo apt install zsh
 ```
 
 Instalamos oh my zsh:
 
 ```shell
-$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 ```
 
 Cambiamos el shell default:
 
 ```shell
-$ chsh -s $(which zsh)
+chsh -s $(which zsh)
 ```
 
 ### Configuración de plugins integrados en zsh
@@ -290,7 +221,7 @@ $ chsh -s $(which zsh)
 Editamos el archivo de configuración de zsh:
 
 ```shell
-$ vim .zshrc
+vim .zshrc
 ```
 
 Para habilitar los diferentes plugins cambiamos:
@@ -308,7 +239,7 @@ plugins=(cp colored-man-pages colorize pip python git vi-mode)
 Guardamos y re cargamos configuración:
 
 ```shell
-$ source .zshrc
+source .zshrc
 ```
 
 ### Configuración del tema integrado en zsh
@@ -316,7 +247,7 @@ $ source .zshrc
 Editamos el archivo de configuración de zsh:
 
 ```shell
-$ vim .zshrc
+vim .zshrc
 ```
 
 Para cambiar el tema cambiamos:
@@ -334,7 +265,7 @@ ZSH_THEME="agnoster"
 Guardamos y re cargamos configuración:
 
 ```shell
-$ source .zshrc
+source .zshrc
 ```
 
 Lista de temas: https://github.com/ohmyzsh/ohmyzsh/wiki/themes.
@@ -344,13 +275,13 @@ Lista de temas: https://github.com/ohmyzsh/ohmyzsh/wiki/themes.
 Instalamos el tema powerlevel9k:
 
 ```shell
-$ git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
 ```
 
 Editamos el archivo de configuración de zsh:
 
 ```shell
-$ vim .zshrc
+vim .zshrc
 ```
 
 Agregamos la lista de sources:
@@ -378,7 +309,7 @@ POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="↳ "
 Guardamos y re cargamos configuración:
 
 ```shell
-$ source .zshrc
+source .zshrc
 ```
 
 Proyecto: https://github.com/Powerlevel9k/powerlevel9k/wiki/Install-Instructions#option-2-install-for-oh-my-zsh
