@@ -7,9 +7,6 @@ tareas relacionadas a la administración de:
 
 * Linux Personal
 * Servidores Linux
-* Recursos Cloud
-* Clusters Kubernetes
-* Desarrollo de software
 
 Intentare usar en su mayoría software libre, es decir, software GNU, el kernel Linux y en especificó la distro
 Kubuntu en una arquitectura x86 de 64-bit.
@@ -20,12 +17,9 @@ Realizaremos las siguientes actividades:
 
 * Gestión de paquetes Apt
 * Instalación de herramientas GNU
-* Configurando el editor de textos vim
-* Emulador de terminal Terminator
-* El shell zsh con oh-my-zsh
-* Herramientas de búsqueda en linea de comandos
-* Conjunto de herramientas de linea de comandos
-* Herramientas de gestión Cloud
+* Configurar el editor de textos vim
+* Configurar el shell zsh con oh-my-zsh
+* Configurar el emulador de terminal kitty
 
 ## Gestión de paquetes Apt
 
@@ -76,7 +70,7 @@ internet usando la línea de comandos:
 sudo apt install wget curl
 ```
 
-## Configuración del editor de textos vim
+## Configurar el editor de textos vim
 
 Instalamos el editor de textos `vim` con el siguiente comando:
 
@@ -111,12 +105,9 @@ set shiftwidth=2
 set softtabstop=2
 set shiftround
 set expandtab " Insertar espacios en lugar de <Tab>s
-
-" Configuracion spell check
-"set spell
-set nospell
-setlocal spell spelllang=es,en " Corregir palabras usando diccionarios en español
 ```
+
+### Usando el corrector ortográfico
 
 Creamos directorio para spell check:
 
@@ -141,7 +132,16 @@ touch ~/.vim/spell/es.utf-8.add
 touch ~/.vim/spell/en.utf-8.add
 ```
 
-Atajos de teclado para la corrección ortográfica::
+Para usar el corrector ortográfico, añadimos las siguientes líneas al final del archivo `.vimrc`:
+
+```
+" Configuración spell check
+"set spell
+set nospell
+setlocal spell spelllang=es,en " Corregir palabras usando diccionarios en español
+```
+
+Para hacer fácil el uso, aconsejo usar los siguientes atajos de teclado:
 
 * **]s** – Siguiente falta ortográfica
 * **[s** – Anterior falta ortográfica
@@ -149,6 +149,8 @@ Atajos de teclado para la corrección ortográfica::
 * **zg** – Añadir una palabra al diccionario.
 * **zug** – Deshacer la adición de una palabra al diccionario.
 * **zw** – Eliminar una palabra del diccionario.
+
+### Instalando plugins con plug-vim
 
 Ahora vamos a instalar la herramienta para gestión de plugins `plug-vim`:
 
@@ -186,17 +188,33 @@ Guardar vim, salir, y volver a entrar, entonces ejecutamos el siguiente comando:
 :PlugInstall
 ```
 
-## Emulador de terminal Terminator
+### Explorando archivos con NERDtree
 
-Instalamos el paquete Terminator:
+NERDTree es un explorador del sistema de archivos para el editor Vim. Al usar este plugin, los usuarios pueden
+explorar visualmente jerarquías de directorios complejas, abrir archivos rápidamente para leerlos o editarlos y
+realizar operaciones del sistema de archivos básicas.
 
-```shell
-sudo apt install terminator
+Para abrir NERDtree en vim, usa el comando `:NERDtree`, y dentro del explorador de archivos puedes usar los siguientes
+atajos de teclado:
+
+* t: Abrir el archivo seleccionado en una pestaña nueva
+* i: Abrir el archivo seleccionado en una ventana dividida horizontalmente
+* s: Abrir el archivo seleccionado en una ventana dividida verticalmente
+* I: Muestra los archivos ocultos
+* m: Muestra el menu de NERDtree
+* R: Refresca el árbol, útil si los archivos cambian fuera de Vim
+
+Para personalizar el uso añade las siguientes lineas al archivo de configuración de vim:
+
+```
+" NERDTree mapping
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
 ```
 
-Shortcuts: TODO.
+Con estos mapeos de teclas, podemos usar **ctrl+n** para abrir NERDtree, y **ctrl+t** para ocultarlo.
 
-## El shell zsh con oh-my-zsh
+## Configurar el shell zsh con oh-my-zsh
 
 Instalamos el shell zsh:
 
@@ -296,7 +314,6 @@ POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
 POWERLEVEL9K_OS_ICON_BACKGROUND="white"
 POWERLEVEL9K_OS_ICON_FOREGROUND="blue"
 POWERLEVEL9K_TIME_FORMAT="%D{%H:%M:%S | %d.%m.%y}"
-
 ```
 
 Otras opciones:
@@ -313,3 +330,88 @@ source .zshrc
 ```
 
 Proyecto: https://github.com/Powerlevel9k/powerlevel9k/wiki/Install-Instructions#option-2-install-for-oh-my-zsh
+
+### Configurando una fuente Powerline
+
+Para que el tema pueda renderizar apropiadamente, necesitas una fuente que tenga los glifos *Powerline*. Estos son
+usados al inicio y al final de los segmentos para producir la apariencia *powerline*. Ademas, si la fuente incluye
+alguno de los conjuntos de glifos expandidos, Powerlevel9k es capaz de hacer uso de ellos para producir un prompt
+muy chulo.
+
+Descarga la última version de los símbolos de la fuente y el archivo de `fontconfig`:
+
+```
+wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
+wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
+```
+
+Mueve los símbolos de la fuente a una ruta de fuentes valida.
+
+```
+mkdir ~/.fonts/
+mv PowerlineSymbols.otf ~/.fonts/
+```
+
+Actualiza el cache de las fuentes para la nueva ruta donde se movieron los archivos:
+
+```
+fc-cache -vf ~/.fonts/
+```
+
+Instala el archivo de fontconfig:
+
+```
+mkdir -p .config/fontconfig/conf.d
+mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d/
+```
+
+Cierra la terminal y verifica que ya aparecen los símbolos en el prompt.
+
+## Emulador de terminal kitty
+
+Kitty es un emulador de terminar rico en funcionalidades, basado en GPU y muy rápido.
+
+Instalamos kitty con el script instalador:
+
+```
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+```
+
+Creamos un directorio local para binarios, y hacemos un enlace simbólico de el binario de Kitty a la ruta local:
+
+```
+mkdir ~/.local/bin
+ln -sf ~/.local/kitty.app/bin/kitty ~/.local/bin/
+ln -sf ~/.local/kitty.app/bin/kitten ~/.local/bin/
+```
+
+Ahora editamos el archivo de inicialización del shell zsh para ajustar el PATH:
+
+```
+vim .zshrc
+```
+
+Agregamos o modificamos la linea que exporta la variable `PATH`:
+
+```
+export PATH=$HOME/bin:.local/bin:$PATH
+```
+
+Y finalmente recargamos la configuración del shell:
+
+```
+source .zshrc
+```
+
+Descargamos los temas de kitty:
+
+```
+git clone --depth 1 https://github.com/dexpota/kitty-themes.git ~/.config/kitty/kitty-themes
+```
+
+Configuramos el tema de dracula:
+
+```
+cd ~/.config/kitty
+ln -s ./kitty-themes/themes/Dracula.conf ~/.config/kitty/theme.conf
+```
