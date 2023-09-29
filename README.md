@@ -67,7 +67,13 @@ Instalaremos los programas de linea de comandos `wget` y `curl` los cuales usare
 internet usando la línea de comandos:
 
 ```shell
-sudo apt install wget curl
+sudo apt install wget curl whois ipcalc mtr nmap
+```
+
+Instalaremos algunas herramientas útiles para el manejo de archivos:
+
+```shell
+sudo apt install tree fzf silversearcher-ag
 ```
 
 ## Configurar el editor de textos vim
@@ -213,6 +219,30 @@ nnoremap <C-t> :NERDTreeToggle<CR>
 ```
 
 Con estos mapeos de teclas, podemos usar **ctrl+n** para abrir NERDtree, y **ctrl+t** para ocultarlo.
+
+### Configurando el soporte para markdown
+
+Agregamos al final del archivo `.vimrc` las siguientes configuraciones para trabajar con archivos markdown:
+
+```
+" Syntax for markdown enabled
+au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+au BufNewFile,BufFilePre,BufRead *.txt set filetype=markdown
+set syntax=markdown
+```
+
+Guardamos el archivo y probamos abriendo algún archivo con formato markdown.
+
+### Configurando integración con fzf
+
+Agregamos al final del archivo `.vimrc` las siguientes configuraciones para trabajar con archivos markdown:
+
+```
+" Habilitar fzf
+set rtp+=/usr/bin/fzf
+```
+
+Guardamos el archivo y probamos.
 
 ## Configurar el shell zsh con oh-my-zsh
 
