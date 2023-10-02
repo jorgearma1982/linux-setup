@@ -16,7 +16,7 @@ Kubuntu en una arquitectura x86 de 64-bit.
 Realizaremos las siguientes actividades:
 
 * Gestión de paquetes Apt
-* Instalación de herramientas GNU
+* Instalación de herramientas CLI
 * Configurar el editor de textos vim
 * Configurar el shell zsh con oh-my-zsh
 * Configurar el emulador de terminal kitty
@@ -384,18 +384,48 @@ mv PowerlineSymbols.otf ~/.fonts/
 
 Actualiza el cache de las fuentes para la nueva ruta donde se movieron los archivos:
 
-```
+```shell
 fc-cache -vf ~/.fonts/
 ```
 
 Instala el archivo de fontconfig:
 
-```
+```shell
 mkdir -p .config/fontconfig/conf.d
 mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d/
 ```
 
 Cierra la terminal y verifica que ya aparecen los símbolos en el prompt.
+
+### Configurando las Nerd Fonts
+
+Nerd fonts son parches para las fuentes para desarrolladores con un alto número de glifos (iconos).
+
+Descargamos la fuente Meslo:
+
+```shell
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip
+```
+
+Descomprimimos la fuente en el directorio local de fuentes:
+
+```shell
+unzip Meslo.zip -d ~/.fonts
+```
+
+Limpiamos los archivos de las fuentes descargadas:
+
+```shell
+rm Meslo.zip
+```
+
+Actualizamos el cache de las fuentes:
+
+```shell
+fc-cache -vf ~/.fonts/
+```
+
+Para conocer más ir [sitio oficial de nerdfonts](https://www.nerdfonts.com/).
 
 ## Emulador de terminal kitty
 
